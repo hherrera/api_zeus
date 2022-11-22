@@ -1,13 +1,9 @@
 pyodbc
-requests
+
 fastapi
-
-
-python-magic
-Pillow    
-PyPDF2
-
+uvicorn
 #for loading environment variables  #new
 python-dotenv
 # debug
 debugpy
+

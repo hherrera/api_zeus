@@ -1,15 +1,13 @@
 
 from typing import Dict
 import pyodbc
-from settings import Settings
 
+from settings import settings
 
-settings=Settings()
 #crear la conexion con base a los parametros
 def connect(conn_str: str = None):
     if conn_str is None:
         conn_str = settings.database_url()
-        print(conn_str)
     return pyodbc.connect(conn_str)
     
 def row_to_dict(row):
@@ -34,7 +32,8 @@ def query(sql : str, params : tuple = None, conn = None):
         results = rows_to_dict(row)
     except pyodbc.Error as e:
         ## responder Null
-        print(e)
+        print(f'Error {e} | SQL was {sql}', severity="ERROR")
+        
     finally:
         cur.close()
         if conn_close:
@@ -45,6 +44,7 @@ def query(sql : str, params : tuple = None, conn = None):
         return results[0]
     
     return results
+
 
 if __name__=="__main__":
    pass
