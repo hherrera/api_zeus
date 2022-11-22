@@ -2,7 +2,8 @@ version: '3.8'
 
 services:
   api_zeus:
-    build: .
+    image: us.gcr.io/sifinca-1329/api_zeus:latest
+    #build: .
     command: uvicorn main:app --host 0.0.0.0 --port 8008 --reload
     volumes:
       - .:/usr/src/app
@@ -11,9 +12,9 @@ services:
      
     environment:
       - USER=sa
-      - PASSWORD=i3kygbb2
-      - SERVER=10.102.1.3
+      - PASSWORD=I3kygbb2
+      - SERVER=192.168.100.8
       - PORT=1433
-      - DATABASE=sifinca
+      - DATABASE=ContabilidadCtg
       - DRIVER=freeTDS
  

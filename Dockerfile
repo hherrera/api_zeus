@@ -23,7 +23,6 @@ COPY requirements.txt .
 # install pyodbc (and, optionally, sqlalchemy)
 RUN pip install   -r requirements.txt  && rm -rf /root/.cache 
 COPY . .
-
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8008"]
 
 

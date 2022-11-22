@@ -1,17 +1,16 @@
 import os
-from dotenv import load_dotenv
 import pyodbc
 
 class Settings:
     def __init__(self):
        
         ## load variables of .env
-        load_dotenv()
+        
         self.PROJECT_NAME:str = "API gateway from ZEUS"
         self.PROJECT_VERSION:str = "0.0.1"
 
         ##
-        self.HOST:str = os.environ.get("HOST")
+        self.SERVER:str = os.environ.get("SERVER")
         self.USER:str = os.environ.get("USER")
         self.PASSWORD:str = os.environ.get("PASSWORD")
         self.PORT:str = os.environ.get("PORT")
