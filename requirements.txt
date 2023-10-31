@@ -1,5 +1,4 @@
 pyodbc
-
 fastapi
 uvicorn
 #for loading environment variables  #new

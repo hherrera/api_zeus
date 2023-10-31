@@ -1,4 +1,5 @@
 import os
+from typing import Any
 import pyodbc
 
 class Settings:
@@ -16,7 +17,8 @@ class Settings:
         self.PORT:str = os.environ.get("PORT")
         self.DATABASE:str = os.environ.get("DATABASE")
         self.DRIVER:str = os.environ.get("DRIVER")
-       
+
+    
     def database_url(self):
        return  f"Driver={self.DRIVER};Server={self.SERVER};PORT={self.PORT};DATABASE={self.DATABASE};UID={self.USER};pwd={self.PASSWORD};TDS_Version=7.2;CHARSET=UTF-8;"
    

@@ -19,12 +19,16 @@ def rows_to_dict(row):
 
 def query(sql : str, params : tuple = None, conn = None):
     conn_close=False
+    results= None
     if conn is None:
         conn = connect()
         conn_close = True
    
     try:
         cur = conn.cursor()
+        
+        print(f'sql:{sql} \n params:{params}')
+
         if params:
             row = cur.execute(sql,params)
         else:
@@ -32,7 +36,7 @@ def query(sql : str, params : tuple = None, conn = None):
         results = rows_to_dict(row)
     except pyodbc.Error as e:
         ## responder Null
-        print(f'Error {e} | SQL was {sql}', severity="ERROR")
+        print(f'Error {e} | SQL was {sql}, severity="ERROR"')
         
     finally:
         cur.close()
