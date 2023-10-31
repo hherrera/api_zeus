@@ -1,8 +1,6 @@
 venv
 __pycache__
 Dockerfile
+docker-compose.yml
 README.md
-*.pyc
-*.pyo
-*.pyd
 .pytest_cache
