@@ -29,15 +29,8 @@ async def home():
 
 
 @app.get("/document/{fndcto}/{numedcto}")
-async def getDocument(fndcto:str,numedcto:str):
-    sql = """select d.FNTEDCTO , d.NUMEDCTO , d.IDTERCERO , d.FECHDCTO , t.NOMBRETER 
-                from DOCUMENT d 
-                left join  TERCEROS t on t.IDTERCERO =d.IDTERCERO  
-                where FNTEDCTO =?
-                and NUMEDCTO = ?"""
-
-    conn=connect()
-    data = query(conn=conn, sql=sql,params=(fndcto.zfill(2),numedcto.zfill(10)))
+async def get_doc_metadata(fndcto:str,numedcto:str):
+    data = getDocument(fndcto,numedcto)
     return data
 @app.get("/invoice/{prefijo}/{numedcto}")
 async def get_inv_metadata(prefijo:str,numedcto:str):
