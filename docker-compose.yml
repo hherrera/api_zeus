@@ -13,12 +13,8 @@ services:
     environment:
       - USER=sainventario
       - PASSWORD=z
-<<<<<<< HEAD
-      - SERVER= 192.168.8.130
-=======
-      - SERVER=localhost
->>>>>>> ed6899c56c9addb013045db4f7e68e1bb9400405
-      - PORT=51433
+      - SERVER= 192.168.0.9
+      - PORT=1433
       - DATABASE=Contabilidad_Ladrillera
       - DRIVER=freeTDS
  
