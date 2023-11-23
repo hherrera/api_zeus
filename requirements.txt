@@ -1,8 +1,10 @@
 pyodbc
 fastapi
 uvicorn
+opencv-python
+supabase
+typer
 #for loading environment variables  #new
 python-dotenv
 # debug
 debugpy
-
