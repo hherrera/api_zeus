@@ -23,6 +23,8 @@ COPY requirements.txt .
 # install pyodbc (and, optionally, sqlalchemy)
 RUN pip install   -r requirements.txt  && rm -rf /root/.cache 
 COPY . .
+# Instala la utilidad ping
+RUN apt-get update && apt-get install -y iputils-ping &&  apt-get install -y openssh-client
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8008"]
 
 

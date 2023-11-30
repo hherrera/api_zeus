@@ -1,42 +1,40 @@
 from helpers.db import connect,query, connectdb
 from settings import settings
 
-def  getOrdersAll(CURRENT_ORDER_SYNC:int=0):
+def  getDispatchAll(CURRENT_SYNC:int=0):
     
     conn=connectdb(settings.DB_INVENTARIO)
-    if CURRENT_ORDER_SYNC==0:
-        sql = """Select  D.Consecutivo as id,D.Estado
-                From PedidoDeCliente As D 
+    if CURRENT_SYNC==0:
+        sql = """Select top 5  D.Consecutivo as id,D.Estado
+                From Remision As D 
                 where YEAR(D.Fecha) >= 2023
                 order by D.Consecutivo ASC """
         data = query(conn=conn, sql=sql)
 
     else:
-        sql = """Select  D.Consecutivo as id,D.Estado
-                From PedidoDeCliente As D 
+        sql = """Select top 5 D.Consecutivo as id,D.Estado
+                From Remision As D 
                 where  D.Consecutivo >= ? AND YEAR(D.Fecha) >= 2023
                 order by D.Consecutivo ASC """
-        data = query(conn=conn, sql=sql,params=(CURRENT_ORDER_SYNC,))
+        data = query(conn=conn, sql=sql,params=(CURRENT_SYNC,))
         
-    if isinstance(data, dict):
-        data = [data]
+
     
     
     return data
 
-def  getOrder(order_id:int):
-    
-    sql = """Select  D.Consecutivo as id,D.Fecha,D.FechaEntrega,D.Detalle,D.Estado,D.Cliente,CL.IDTercero,
-		CL.RazonCial ,CL.Direccion,CL.Ciudad,CL.Telefono,D.Vendedor,V.NOMBVENDE
-        From	PedidoDeCliente As D 
-		LEFT OUTER JOIN Clientes As CL ON D.Cliente=CL.IDCliente 
-		LEFT OUTER JOIN MAEVENDE AS V ON D.Vendedor=V.IDVende
-        where D.consecutivo =? 
+def  getDispatch(dispatch_id:int):
+    """Select Remision , con los Items en la data"""
+    sql = """Exec spRptRemision ? 
 	     """
     
     conn=connectdb(settings.DB_INVENTARIO)
-    data = query(conn=conn, sql=sql,params=(order_id,))
-    
+    data = query(conn=conn, sql=sql,params=(dispatch_id,))
+
+    if isinstance(data, dict):
+        data = [data]
+
+
     return data
 
 

@@ -1,36 +1,27 @@
 import typer
 from services.zOrders import getOrdersAll, getOrderItems, getOrder
+import debugpy
+# Habilita la depuración en el puerto 5679
+debugpy.listen(('0.0.0.0', 5678))
+
+
 app = typer.Typer()
 
-
 @app.command()
-def hello(name: str):
-    print(f"Hello {name}")
-
-
-@app.command()
-def goodbye(name: str, formal: bool = False):
-    if formal:
-        print(f"Goodbye Ms. {name}. Have a good day.")
-    else:
-        print(f"Bye {name}!")
-
-
-@app.command()
-def orders(consecutive: int = 0,
+def orders(id: int = 0,
            all: bool = True,
-             items: bool = False
+           items: bool = False
            ):
-    """Cargar pedido o items de una pedido """
+    """Cargar lista pedidos, pedidos o items de un pedido """
     response=[]
     
     if(items):
-        getOrderItems(consecutive)
+        getOrderItems(id)
     
     if(all):
-        response = getOrdersAll(consecutive)
+        response = getOrdersAll(id)
     else:
-         response = getOrder(consecutive)
+         response = getOrder(id)
     
     print(response) 
 

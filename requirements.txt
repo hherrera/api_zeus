@@ -6,5 +6,6 @@ supabase
 typer
 #for loading environment variables  #new
 python-dotenv
+paramiko
 # debug
 debugpy
