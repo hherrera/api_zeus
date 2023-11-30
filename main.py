@@ -41,5 +41,8 @@ async def get_empleado(code:str):
     data = getEmpleado(code=code)
     return data
 
+
+
+
 if __name__=='__main__':
     app()

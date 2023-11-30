@@ -7,13 +7,17 @@ services:
     volumes:
       - .:/usr/src/app
     ports:
-      - 8008:8008
-     
+      - 8089:8008
+      - 5678:5678
+    env_file: .env 
     environment:
       - USER=sainventario
       - PASSWORD=z
-      - SERVER= 192.168.0.9
-      - PORT=1433
+      - SERVER=localhost #192.168.0.9
+      - PORT=51433
       - DATABASE=Contabilidad_Ladrillera
       - DRIVER=freeTDS
+      - DB_INVENTARIO=Inventario_Ladrillera
+      - DB_NOMINA=Nomina
+      - DB_CONTABILIDAD=Contabilidad_Ladrillera
  
