@@ -11,6 +11,24 @@ def upsertDispatch(dispatch:dict):
 
 def upsertItemDispatch(item:dict):
     
-    data, count = supabase.table('dispatchItems').upsert(item).execute()
+    data, count = supabase.table('dispatchsItems').upsert(item).execute()
+
+    return data[1]
+
+def fetchDispatchbyStatus(status:List[str]):
+    
+    data, count = supabase.table('dispatchs').select('id').in_('status',status ).execute()
+
+    return data[1]
+
+def deleteDispatchsOrders(dispacth_id:int):
+    
+    data, count = supabase.table('dispatchs_orders').delete().eq('dispatch_id',dispacth_id).execute()
+
+    return data[1]
+
+def insertDispatchsOrders(item:dict):
+    
+    data, count = supabase.table('dispatchs_orders').insert(item).execute()
 
     return data[1]
