@@ -24,6 +24,23 @@ def  getOrdersAll(CURRENT_ORDER_SYNC:int=0):
     
     return data
 
+def  getOrderById(id:int):
+    
+    conn=connectdb(settings.DB_INVENTARIO)
+    
+    sql = """Select  D.Consecutivo as id,D.Estado
+                From PedidoDeCliente As D 
+                where D.consecutivo=?
+                 """
+    data = query(conn=conn, sql=sql,params=(id,))
+
+        
+    if isinstance(data, dict):
+        data = [data]
+    
+    
+    return data
+
 def  getOrder(order_id:int):
     
     sql = """Select  D.Consecutivo as id,D.Fecha,D.FechaEntrega,D.Detalle,D.Estado,D.Cliente,CL.IDTercero,

@@ -4,6 +4,7 @@ def datetime_serializer(obj):
     if isinstance(obj, datetime):
         return obj.isoformat()
 # Función de serialización para Decimals
-def decimal_serializer(obj):
-    if isinstance(obj, Decimal):
-        return str(obj)  # Convertir Decimal a cadena
+def decimal_serializer(value):
+    if isinstance(value, Decimal):
+        return float(value)
+    return value  # Convertir Decimal a cadena
