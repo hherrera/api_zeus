@@ -7,14 +7,14 @@ def  getOrdersAll(CURRENT_ORDER_SYNC:int=0):
     if CURRENT_ORDER_SYNC==0:
         sql = """Select  D.Consecutivo as id,D.Estado
                 From PedidoDeCliente As D 
-                where YEAR(D.Fecha) >= 2023
+                where YEAR(D.Fecha) > 2023
                 order by D.Consecutivo ASC """
         data = query(conn=conn, sql=sql)
 
     else:
         sql = """Select  D.Consecutivo as id,D.Estado
                 From PedidoDeCliente As D 
-                where  D.Consecutivo >= ? AND YEAR(D.Fecha) >= 2023
+                where  D.Consecutivo >= ? AND YEAR(D.Fecha) > 2023
                 order by D.Consecutivo ASC """
         data = query(conn=conn, sql=sql,params=(CURRENT_ORDER_SYNC,))
         

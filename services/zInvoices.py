@@ -7,14 +7,14 @@ def  getInvoicesAll(CURRENT_INVOICES_SYNC:int):
     if CURRENT_INVOICES_SYNC==0:
         sql = """Select  D.Consecutivo as id,D.Estado
                 From FacturaDeCliente As D 
-                where YEAR(D.Fecha) >= 2023
+                where YEAR(D.Fecha) > 2023
                 order by D.Consecutivo ASC """
         data = query(conn=conn, sql=sql)
 
     else:
         sql = """Select  D.Consecutivo as id,D.Estado
                 From FacturaDeCliente As D 
-                where  D.Consecutivo >= ? AND YEAR(D.Fecha) >= 2023
+                where  D.Consecutivo >= ? AND YEAR(D.Fecha) > 2023
                 order by D.Consecutivo ASC """
         data = query(conn=conn, sql=sql,params=(CURRENT_INVOICES_SYNC,))
         
@@ -42,8 +42,7 @@ def  getInvoice(consecutive:int):
 
 
 def  getInvoiceItems(consecutive:int):
-   
-   
+      
     sql = """
  Select  DI.iden as id,DI.Codigo,D.Consecutivo,
 		A.Codigo,A.Nombre As 'NombreArt',A.Presentacion,DI.PorcentajeDcto,DI.PorcentajeIVA,

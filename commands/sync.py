@@ -1,12 +1,28 @@
 from services.zOrders import getOrdersAll, getOrderItems, getOrder,getOrderById
 from services.zDispatch import getDispatch,getDispatchItems,getDispatchAll
+from services.zProducts import getProductsAll, getProduct
 from crud.orders import upsertOrder,upsertItemOrder,fetchOrdersbyStatus
 from crud.dispatchs import upsertDispatch,upsertItemDispatch, fetchDispatchbyStatus, deleteDispatchsOrders,insertDispatchsOrders
 from crud import parameters  
+from crud.products import upsertProducts
 from helpers.utils import datetime_serializer, decimal_serializer
 
+def sync_products():
+    num=0
+    products = getProductsAll()
 
-
+    for product in products:
+        p = getProduct(product['id'])
+        print(p)
+        #D.idArticulo, D.Nombre, D.codigo, D.grupo
+        upsertProducts({"id":int(product['id']),
+                        "name":p['nombre'],
+                        "code":p['codigo'],
+                        "group_id":p['grupo'],
+                        "display": p['presentacion']
+                        })
+        num=num+1
+    return num
 
 
 def sync_dispatch(type:str):
@@ -149,7 +165,9 @@ def sync_orders(type:str, id:int=None):
         #cargar order
         order_data=getOrder(int(order['id']))  
         #crear dict order
-
+        if order_data is None:
+            continue
+        print(order_data)
         print(f"Pedido #{int(order['id'])}")
         order_dict = {
             "id": int(order_data['id']),

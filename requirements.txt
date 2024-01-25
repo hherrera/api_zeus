@@ -1,7 +1,9 @@
+requests
+opencv-python
 pyodbc
 fastapi
 uvicorn
-opencv-python
+
 supabase
 typer
 #for loading environment variables  #new

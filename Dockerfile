@@ -8,6 +8,7 @@ RUN apt-get update \
  && apt-get install freetds-dev -y \
  && apt-get install freetds-bin -y \
  && apt-get install tdsodbc -y \
+ && apt-get install libgl1-mesa-glx libglib2.0-0 -y \
  && apt-get install --reinstall build-essential -y \
  && rm -rf /var/lib/apt/lists/* \
  && echo "[FreeTDS]\n\
