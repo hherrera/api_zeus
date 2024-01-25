@@ -3,20 +3,20 @@ from typing import List
 from helpers.db_supabase import supabase
 
 
-def upsertOrder(order:dict):
+def upsertInvoice(order:dict):
     """Insert/update, debe incluir al key (id) """ 
-    data, count = supabase.table('orders').upsert(order).execute()
+    data, count = supabase.table('invoices').upsert(order).execute()
 
     return data[1]
 
-def upsertItemOrder(item:dict):
+def upsertItemInvoice(item:dict):
     
-    data, count = supabase.table('ordersItems').upsert(item).execute()
+    data, count = supabase.table('invoicesItems').upsert(item).execute()
 
     return data[1]
 
-def fetchOrdersbyStatus(status:List[str]):
+def fetchInvoicesbyStatus(status:List[str]):
     
-    data, count = supabase.table('orders').select('*').in_('status',status ).execute()
+    data, count = supabase.table('invoices').select('id').in_('status',status ).execute()
 
     return data[1]

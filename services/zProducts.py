@@ -5,9 +5,9 @@ def  getProductsAll():
     
     conn=connectdb(settings.DB_INVENTARIO)
    
-    sql = """Select  D.idArticulo as id,
+    sql = """Select  D.idArticulo as id
                 From Articulo As D 
-                where substring(Grupo,1,2)='15' 
+                where substring(Grupo,1,4) in('1501','1502','2004')
                 order by id ASC """
     data = query(conn=conn, sql=sql)
         
@@ -36,7 +36,7 @@ def  getProductById(id:int):
 
 def  getProduct(product_id:int):
     
-    sql = """Select  D.idArticulo, D.Nombre, D.codigo, D.grupo
+    sql = """Select  D.idArticulo, D.Nombre, D.codigo, D.grupo, D.presentacion
         From	Articulo As D 
 		  where D.idArticulo =? 
 	     """

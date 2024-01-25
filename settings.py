@@ -25,6 +25,8 @@ class Settings:
         self.SUPABASE_URL=os.getenv("SUPABASE_URL")
         self.SUPABASE_KEY=os.getenv("SUPABASE_KEY")
 
+        self.TOKEN_API=os.getenv("TOKEN_API")
+
     def database_url(self,dbname:str = None ):
        if(dbname is None):
          str_conn=f"Driver={self.DRIVER};Server={self.SERVER};PORT={self.PORT};DATABASE={self.DATABASE};UID={self.USER};pwd={self.PASSWORD};TDS_Version=7.2;CHARSET=UTF-8;"

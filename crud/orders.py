@@ -17,6 +17,6 @@ def upsertItemOrder(item:dict):
 
 def fetchOrdersbyStatus(status:List[str]):
     
-    data, count = supabase.table('orders').select('*').in_('status',status ).execute()
+    data, count = supabase.table('orders').select('id').in_('status',status ).execute()
 
     return data[1]
