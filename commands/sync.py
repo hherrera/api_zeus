@@ -1,10 +1,12 @@
 from services.zOrders import getOrdersAll, getOrderItems, getOrder,getOrderById
 from services.zDispatch import getDispatch,getDispatchItems,getDispatchAll
 from services.zProducts import getProductsAll, getProduct
+from services.zDocsRelations import getOrdersRelations
 from crud.orders import upsertOrder,upsertItemOrder,fetchOrdersbyStatus
 from crud.dispatchs import upsertDispatch,upsertItemDispatch, fetchDispatchbyStatus, deleteDispatchsOrders,insertDispatchsOrders
 from crud import parameters  
 from crud.products import upsertProducts
+from crud.orders import upsertOrderDocRelations
 from helpers.utils import datetime_serializer, decimal_serializer
 
 def sync_products():
@@ -143,7 +145,10 @@ def sync_orders(type:str, id:int=None):
     elif type =='All':
         # cargar todas las orders 
         print(f"Actualizando todos los Pedidos!!!!! ") 
+        
         orders = getOrdersAll(0)  
+        print(f"Actualizando todos los Productos!!!!! ") 
+        sync_products()
     elif type=='New':
             param = parameters.select('CURRENT_ORDER_SYNC')[0]
             current_id = int(param['value'])  
@@ -157,7 +162,7 @@ def sync_orders(type:str, id:int=None):
         return False
   
             
-    print(orders)
+    #print(orders)
     if orders is None:
         return None     
     # recorrer orders
@@ -167,7 +172,7 @@ def sync_orders(type:str, id:int=None):
         #crear dict order
         if order_data is None:
             continue
-        print(order_data)
+       
         print(f"Pedido #{int(order['id'])}")
         order_dict = {
             "id": int(order_data['id']),
@@ -181,8 +186,14 @@ def sync_orders(type:str, id:int=None):
             "client_city": order_data['ciudad'],
             "client_phone": order_data['telefono'],
             "seller_id": order_data['vendedor'],
-            "seller_name": order_data['nombvende']
+            "seller_name": order_data['nombvende'],
+            "delivery_address": order_data.get('despachodireccion',''),
+            "delivery_city": order_data.get('despachociudad',''),
+            "delivery_reference": order_data.get('despachocliente','')
+
          }
+        
+        print(order_dict)
         #cargar items
         items = getOrderItems(order['id'])
         #crear dict item
@@ -196,15 +207,29 @@ def sync_orders(type:str, id:int=None):
                         "item_code": item['codigo'],
                         "item_name": item['nombreart'],
                         "quantity": int(item['cantidad']),
-                        "value": item['valorunidad'] ,
-                        "display":item['presentacion'] ,
-                        "subtotal":item['valorunidad']*int(item['cantidad'])
+                        "value": item['preciounidad'] ,
+                        "missing_quantity": item['faltantes'] ,
+                        "display":item['presentacion'] 
+                       
                         }
             items_data.append(item_dict)
         #upsert order & item
         result_order = upsertOrder(order_dict)   
         result_items = upsertItemOrder(items_data)
         #actualizar contador con order_id
+
+        order_docs_data =  getOrdersRelations(order['id'])
+        for order_rel in  order_docs_data:
+            upsertOrderDocRelations({
+                 "id":int(order_rel['id']),
+                 "order_id":int(order['id']),
+                 "doc_id":order_rel['documento'],
+                "tipo_doc":order_rel['tipo_documento'],
+
+                                      })
+
+
+
         if (type=='New'):
             parameters.update('CURRENT_ORDER_SYNC',int(order['id']))
         num=num+1

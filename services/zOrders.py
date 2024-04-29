@@ -44,7 +44,7 @@ def  getOrderById(id:int):
 def  getOrder(order_id:int):
     
     sql = """Select  D.Consecutivo as id,D.Fecha,D.FechaEntrega,D.Detalle,D.Estado,D.Cliente,CL.IDTercero,
-		CL.RazonCial ,CL.Direccion,CL.Ciudad,CL.Telefono,D.Vendedor,V.NOMBVENDE
+		CL.RazonCial ,CL.Direccion,CL.Ciudad,CL.Telefono,D.Vendedor,V.NOMBVENDE, D.DespachoDireccion, D.DespachoCliente, D.DespachoCiudad
         From	PedidoDeCliente As D 
 		LEFT OUTER JOIN Clientes As CL ON D.Cliente=CL.IDCliente 
 		LEFT OUTER JOIN MAEVENDE AS V ON D.Vendedor=V.IDVende
@@ -64,7 +64,10 @@ def  getOrderItems(order_id:int):
 		A.Codigo,A.Nombre As 'NombreArt',A.Presentacion,DI.PorcentajeDcto,DI.PorcentajeIVA,
 		Abs(DI.Cantidad) As 'Cantidad', 
 		Valorunidad = dbo.fnNuevaValorUnidad(0, DI.ValorUnidad, DI.ValorUnidad2)  
-	From	PedidoDeCliente As D 
+        PrecioUnidad as precio, 
+        faltantes,
+        aprobados
+    From	PedidoDeCliente As D 
 		LEFT OUTER JOIN DocumentoItems As DI	
 		ON D.Consecutivo=DI.Documento And DI.TipoDocumento=7 
 		LEFT OUTER JOIN Items As I ON DI.Item=I.Codigo 

@@ -9,6 +9,13 @@ def upsertOrder(order:dict):
 
     return data[1]
 
+#data.extend(data1)
+def upsertOrderDocRelations(order_doc_relations:dict):
+    """Insert/update, debe incluir al key (id) """ 
+    data, count = supabase.table('orders_doc_relations').upsert(order_doc_relations).execute()
+
+    return data[1]
+
 def upsertItemOrder(item:dict):
     
     data, count = supabase.table('ordersItems').upsert(item).execute()

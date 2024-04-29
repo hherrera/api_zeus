@@ -2,6 +2,8 @@ requests
 opencv-python
 pyodbc
 fastapi
+pydantic
+pydantic[email]
 uvicorn
 
 supabase
@@ -11,3 +13,7 @@ python-dotenv
 paramiko
 # debug
 debugpy
+pandas
+gspread
+gspread-dataframe
+oauth2client

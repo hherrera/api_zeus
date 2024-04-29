@@ -1,14 +1,24 @@
 import pyodbc
 from fastapi import FastAPI,Depends, HTTPException
-from services.cameras import Camera
+
 from fastapi.middleware.cors import CORSMiddleware
+
+from services.cameras import Camera
+from crud.cameras import fecthCamerabyDoorId
+
 from services.zeus import getDocument, getInvoice, getEmpleado
 from services.takephotos import takephoto
-from crud.cameras import fecthCamerabyDoorId
+from services.reports import fetch_trucks_control, fetch_loading_distribution, fetch_order_information, fetch_vehicle_control, fetch_load_report_driver_by_month
+
 from settings import settings
 from dependencies import get_token_header
 from commands.sync import sync_orders
-print(settings.database_url())
+
+from routes import home
+
+from models.reports import ReportControlRequest, ReportDriversRequest
+
+
 app = FastAPI(title=settings.PROJECT_NAME,version=settings.PROJECT_VERSION)
 # CORS
 origins = ["*"]
@@ -23,9 +33,12 @@ app.add_middleware(
 async def verify_token(x_token: str = Depends(get_token_header)):
     return x_token
 
+# includes routes
+#app.include_router(home.router)
+
 
 @app.get("/")
-async def home():
+def home():
     """ """ 
     return {
         "PROJECT_NAME":settings.PROJECT_NAME ,
@@ -75,6 +88,49 @@ async def get_cam_frame(inflow_id:int,door_id:int,action:str, x_token: str = Dep
        
 
     return  {"success":True}
+
+@app.post("/make_report_control/")
+async def make_report_control(request_data:ReportControlRequest,x_token: str = Depends(verify_token)):
+   # Extraer date_ref y emails del objeto request_data
+    date_ref = request_data.date_ref
+    emails = request_data.emails
+    result = fetch_trucks_control(date_ref,emails)
+    return result
+
+@app.post("/make_report_vehicle/")
+async def make_report_control(request_data:ReportControlRequest,x_token: str = Depends(verify_token)):
+   # Extraer date_ref y emails del objeto request_data
+    date_ref = request_data.date_ref
+    emails = request_data.emails
+    result = fetch_vehicle_control(date_ref,emails)
+    return result
+#fetch_loading_distribution  
+@app.post("/make_report_loading_distribution/")
+async def make_report_loading_distribution(request_data:ReportControlRequest,x_token: str = Depends(verify_token)):
+   # Extraer date_ref y emails del objeto request_data
+    date_ref = request_data.date_ref
+    emails = request_data.emails
+    result = fetch_loading_distribution(date_ref,emails)
+    return result
+
+# Reporte de programacion diaria
+@app.post("/make_report_daily_programming/")
+async def make_report_order_information(request_data:ReportControlRequest,x_token: str = Depends(verify_token)):
+   # Extraer date_ref y emails del objeto request_data
+    date_ref = request_data.date_ref
+    emails = request_data.emails
+    result = fetch_order_information(date_ref,emails)
+    return result
+
+# Reporte de incentivos conductores
+@app.post("/make_report_driver_load/")
+async def make_report_driver_load(request_data:ReportDriversRequest,x_token: str = Depends(verify_token)):
+   # Extraer date_ref y emails del objeto request_data
+    year_ref = request_data.year_ref
+    month_ref = request_data.month_ref
+    emails = request_data.emails
+    result = fetch_load_report_driver_by_month(year=year_ref, month=month_ref,emails=emails)
+    return result
 
 if __name__=='__main__':
     app()

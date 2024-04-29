@@ -26,6 +26,7 @@ class Settings:
         self.SUPABASE_KEY=os.getenv("SUPABASE_KEY")
 
         self.TOKEN_API=os.getenv("TOKEN_API")
+        self.SERVICE_ACCOUNT=os.getenv("SERVICE_ACCOUNT")
 
     def database_url(self,dbname:str = None ):
        if(dbname is None):
