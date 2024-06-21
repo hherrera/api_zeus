@@ -3,4 +3,4 @@ __pycache__
 venv
 .vscode
 .env
-./controlio-a9a2e-aa2f420e4eaa.json
+*.json
