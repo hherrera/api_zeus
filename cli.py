@@ -25,7 +25,8 @@ def orders(id: int = 0,
     
     if(new):
         response = sync_orders(type='New')
-         
+    if(id):
+        response = sync_orders(type='One',id=id)  
     
     print(response) 
 

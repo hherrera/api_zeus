@@ -7,14 +7,14 @@ def  getOrdersAll(CURRENT_ORDER_SYNC:int=0):
     if CURRENT_ORDER_SYNC==0:
         sql = """Select  D.Consecutivo as id,D.Estado
                 From PedidoDeCliente As D 
-                where YEAR(D.Fecha) > 2023
+                where D.Fecha >= '2023-05-31'
                 order by D.Consecutivo ASC """
         data = query(conn=conn, sql=sql)
 
     else:
         sql = """Select  D.Consecutivo as id,D.Estado
                 From PedidoDeCliente As D 
-                where  D.Consecutivo >= ? AND YEAR(D.Fecha) > 2023
+                where  D.Consecutivo >= ? AND YEAR(D.Fecha) >= 2022
                 order by D.Consecutivo ASC """
         data = query(conn=conn, sql=sql,params=(CURRENT_ORDER_SYNC,))
         
@@ -60,18 +60,18 @@ def  getOrder(order_id:int):
 def  getOrderItems(order_id:int):
       
     sql = """
-       Select  DI.iden as id,DI.Codigo,D.Consecutivo,
-		A.Codigo,A.Nombre As 'NombreArt',A.Presentacion,DI.PorcentajeDcto,DI.PorcentajeIVA,
-		Abs(DI.Cantidad) As 'Cantidad', 
-		Valorunidad = dbo.fnNuevaValorUnidad(0, DI.ValorUnidad, DI.ValorUnidad2)  
-        PrecioUnidad as precio, 
-        faltantes,
-        aprobados
-    From	PedidoDeCliente As D 
-		LEFT OUTER JOIN DocumentoItems As DI	
-		ON D.Consecutivo=DI.Documento And DI.TipoDocumento=7 
-		LEFT OUTER JOIN Items As I ON DI.Item=I.Codigo 
-		LEFT OUTER JOIN Articulo As A ON I.Articulo=A.IDArticulo 
+      Select  DI.iden as id,DI.Codigo,D.Consecutivo,
+                A.Codigo,A.Nombre As 'NombreArt',A.Presentacion,DI.PorcentajeDcto,DI.PorcentajeIVA,
+                Abs(DI.Cantidad) As 'Cantidad',
+                 Abs(DI.Aprobado) As 'Aprobado',
+                Valorunidad = dbo.fnNuevaValorUnidad(0, DI.ValorUnidad, DI.ValorUnidad2),
+        DI.PrecioUnidad as preciounidad,
+        (DI.Cantidad-DI.faltantes) as faltantes
+    From        PedidoDeCliente As D
+                LEFT OUTER JOIN DocumentoItems As DI
+                ON D.Consecutivo=DI.Documento And DI.TipoDocumento=7
+                LEFT OUTER JOIN Items As I ON DI.Item=I.Codigo
+                LEFT OUTER JOIN Articulo As A ON I.Articulo=A.IDArticulo
        Where d.consecutivo = ? """
    
     conn=connectdb(settings.DB_INVENTARIO)

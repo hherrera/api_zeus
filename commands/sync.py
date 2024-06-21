@@ -2,7 +2,7 @@ from services.zOrders import getOrdersAll, getOrderItems, getOrder,getOrderById
 from services.zDispatch import getDispatch,getDispatchItems,getDispatchAll
 from services.zProducts import getProductsAll, getProduct
 from services.zDocsRelations import getOrdersRelations
-from crud.orders import upsertOrder,upsertItemOrder,fetchOrdersbyStatus
+from crud.orders import upsertOrder,upsertItemOrder,fetchOrdersbyStatus, deleteItemsOrder
 from crud.dispatchs import upsertDispatch,upsertItemDispatch, fetchDispatchbyStatus, deleteDispatchsOrders,insertDispatchsOrders
 from crud import parameters  
 from crud.products import upsertProducts
@@ -167,15 +167,16 @@ def sync_orders(type:str, id:int=None):
         return None     
     # recorrer orders
     for order in orders:
+        order_id =int(order['id'])
         #cargar order
-        order_data=getOrder(int(order['id']))  
+        order_data=getOrder(order_id)  
         #crear dict order
         if order_data is None:
             continue
        
-        print(f"Pedido #{int(order['id'])}")
+        print(f"Pedido #{order_id}")
         order_dict = {
-            "id": int(order_data['id']),
+            "id":order_id,
             "date":datetime_serializer(order_data['fecha']),
             "delivery_date": datetime_serializer(order_data['fechaentrega']),
             "details": order_data['detalle'],
@@ -207,14 +208,16 @@ def sync_orders(type:str, id:int=None):
                         "item_code": item['codigo'],
                         "item_name": item['nombreart'],
                         "quantity": int(item['cantidad']),
-                        "value": item['preciounidad'] ,
-                        "missing_quantity": item['faltantes'] ,
+                        "value": int(item['preciounidad']) ,
+                        "missing_quantity": int(item['faltantes']) ,
                         "display":item['presentacion'] 
                        
                         }
             items_data.append(item_dict)
         #upsert order & item
-        result_order = upsertOrder(order_dict)   
+        result_order = upsertOrder(order_dict) 
+        # borrar los items
+        result_delete =deleteItemsOrder(order_id)  
         result_items = upsertItemOrder(items_data)
         #actualizar contador con order_id
 

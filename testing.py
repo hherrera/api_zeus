@@ -1,11 +1,15 @@
+import json
 from services.zOrders import getOrdersAll, getOrder, getOrderItems
 from services.zDispatch import getDispatchAll, getDispatch
 from commands.sync import sync_orders , sync_dispatch, sync_products
 from crud.orders import fetchOrdersbyStatus
 from crud.cameras import fecthCamerabyId
-import debugpy
+from services.zQuotations import getRptSalesFormat
+from reports.quotations import rpt_quotation_format
+from helpers.utils import default_converter
+#import debugpy
 # Habilita la depuración en el puerto 5679
-debugpy.listen(('0.0.0.0', 5678))
+#debugpy.listen(('0.0.0.0', 5678))
 
 #response = getOrdersAll(0)
 #response = getDispatchAll(0)
@@ -18,26 +22,6 @@ debugpy.listen(('0.0.0.0', 5678))
 
 ## una vez al dia - sincronizar desde la app 
 #sync_products()
-
-from fastapi import FastAPI, HTTPException
-import asyncpg
-import asyncio
-
-app = FastAPI()
-async def get_db_connection():
-    # Replace with your database credentials
-    return await asyncpg.connect(user='user', password='password', database='db', host='127.0.0.1')
-@app.get("/items/{item_id}")
-async def read_item(item_id: int):
-    conn = await get_db_connection()
-    try:
-        # Be careful with raw SQL to avoid SQL injection
-        row = await conn.fetchrow('SELECT * FROM items WHERE id = $1', item_id)
-        if row is None:
-            raise HTTPException(status_code=404, detail="Item not found")
-        return dict(row)
-    finally:
-        await conn.close()
 
 
 ### esto cada 5 minutos PEDIDOS
@@ -60,8 +44,19 @@ async def read_item(item_id: int):
 #print(data[0]['rstp'])
 #print(order)
 
+data = getRptSalesFormat(1816, 23)
+# Convertir el diccionario a JSON bonito
+json_pretty = json.dumps(data, indent=4, default=default_converter)
 
+# Guardar en un archivo
+with open('output.json', 'w') as f:
+    f.write(json_pretty)
 
+# Imprimir el JSON bonito
+print(json_pretty)
+
+ 
+print( rpt_quotation_format(1816,'COT1816.pdf'))
 
 #print(items)
 

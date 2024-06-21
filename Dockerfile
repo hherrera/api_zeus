@@ -15,6 +15,14 @@ RUN apt-get update \
 Description = FreeTDS unixODBC Driver\n\
 Driver = /usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so\n\
 Setup = /usr/lib/x86_64-linux-gnu/odbc/libtdsS.so" >> /etc/odbcinst.ini
+
+
+# install wkhtmltopdf
+RUN apt-get update \
+ && apt-get install -y wget \
+ && wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.buster_amd64.deb \
+ && apt install -y ./wkhtmltox_0.12.6-1.buster_amd64.deb \
+ && rm wkhtmltox_0.12.6-1.buster_amd64.deb
 # set env variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1

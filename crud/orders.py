@@ -22,6 +22,12 @@ def upsertItemOrder(item:dict):
 
     return data[1]
 
+def deleteItemsOrder(order_id:int):
+    
+    data, count = data, count = supabase.table('ordersItems').delete().eq('order_id', order_id).execute()
+
+    return data[1]
+
 def fetchOrdersbyStatus(status:List[str]):
     
     data, count = supabase.table('orders').select('id').in_('status',status ).execute()

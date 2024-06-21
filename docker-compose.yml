@@ -20,4 +20,3 @@ services:
       - DB_INVENTARIO=Inventario_Ladrillera
       - DB_NOMINA=Nomina
       - DB_CONTABILIDAD=Contabilidad_Ladrillera
- 
