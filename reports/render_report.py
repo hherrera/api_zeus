@@ -44,6 +44,7 @@ def render_template_to_pdf(template_name: str, data: dict, output_filename: str)
     except OSError as e:
         print(f"Error: No se pudo generar el archivo PDF '{output_filename}'.")
         raise e
+    
 def render_template_to_pdf_gotenberg(template_name: str, data: dict, output_filename: str) -> str:
     """
     Renderiza una plantilla Jinja2 con los datos proporcionados y la convierte a PDF usando Gotenberg.

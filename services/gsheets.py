@@ -32,7 +32,9 @@ def dataframe_to_google_sheets(df: pd.DataFrame, email_shares: list[str], sheet_
 
     # Obtener la primera hoja de la hoja de cálculo
     worksheet = sheet.get_worksheet(0)
-    
+    print(f'Total registros DF:{len(df)} \n')
+     # Ajustar el tamaño de la hoja de cálculo según el número de registros del DataFrame
+    worksheet.resize(rows=len(df) + 1, cols=len(df.columns))
     # Actualizar la hoja de cálculo con los datos del DataFrame
     set_with_dataframe(worksheet, df)  # Utilizando gspread_dataframe para simplificar la actualización
 

@@ -18,9 +18,10 @@ def upsertOrderDocRelations(order_doc_relations:dict):
 
 def upsertItemOrder(item:dict):
     
-    data, count = supabase.table('ordersItems').upsert(item).execute()
-
-    return data[1]
+    if item:
+     data, count = supabase.table('ordersItems').upsert(item).execute()
+     return data[1]
+    return []
 
 def deleteItemsOrder(order_id:int):
     
